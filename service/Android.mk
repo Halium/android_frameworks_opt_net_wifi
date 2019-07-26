@@ -41,45 +41,4 @@ LOCAL_MODULE := libwifi-service
 
 include $(BUILD_SHARED_LIBRARY)
 
-# Build the java code
-# ============================================================
-
-wificond_aidl_path := system/connectivity/wificond/aidl
-wificond_aidl_rel_path := ../../../../../$(wificond_aidl_path)
-
-include $(CLEAR_VARS)
-
-LOCAL_AIDL_INCLUDES := $(LOCAL_PATH)/java $(wificond_aidl_path)
-LOCAL_SRC_FILES := $(call all-java-files-under, java) \
-	$(call all-Iaidl-files-under, java) \
-	$(call all-Iaidl-files-under, $(wificond_aidl_rel_path)) \
-	$(call all-logtags-files-under, java)
-
-LOCAL_JAVA_LIBRARIES := \
-	android.hidl.manager-V1.0-java \
-	bouncycastle \
-	conscrypt \
-	jsr305 \
-	services
-LOCAL_STATIC_JAVA_LIBRARIES := \
-	android.hardware.wifi-V1.0-java \
-	android.hardware.wifi-V1.1-java \
-	android.hardware.wifi.supplicant-V1.0-java
-LOCAL_REQUIRED_MODULES := services
-LOCAL_MODULE_TAGS :=
-LOCAL_MODULE := wifi-service
-LOCAL_INIT_RC := wifi-events.rc
-
-LOCAL_DEX_PREOPT_APP_IMAGE := false
-LOCAL_DEX_PREOPT_GENERATE_PROFILE := true
-LOCAL_DEX_PREOPT_PROFILE_CLASS_LISTING := frameworks/base/services/art-profile
-
-ifeq ($(EMMA_INSTRUMENT_FRAMEWORK),true)
-LOCAL_EMMA_INSTRUMENT := true
-endif
-
-LOCAL_JACK_COVERAGE_INCLUDE_FILTER := com.android.server.wifi.*
-
-include $(BUILD_JAVA_LIBRARY)
-
 endif  # !TARGET_BUILD_PDK
